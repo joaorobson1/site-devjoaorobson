@@ -1,0 +1,163 @@
+import type { Metadata, Viewport } from "next";
+import Script from "next/script";
+import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
+import { site } from "@/data/site";
+import "./globals.css";
+
+const display = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-display",
+  display: "swap",
+  weight: ["500", "600", "700"],
+});
+
+const sans = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+  weight: ["400", "500"],
+});
+
+export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
+  title: {
+    default: `${site.name} — ${site.role} & Freelancer`,
+    template: `%s · ${site.name}`,
+  },
+  description: site.description,
+  keywords: [
+    "desenvolvedor freelancer",
+    "landing page",
+    "sistema web",
+    "Next.js",
+    "React",
+    "Firebase",
+    "PostgreSQL",
+    "dashboard administrativo",
+    "sistema de estoque",
+    "automação de processos",
+    "João Robson Antunes",
+  ],
+  authors: [{ name: site.name }],
+  creator: site.name,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: site.locale,
+    url: site.url,
+    title: `${site.name} — ${site.role}`,
+    description: site.description,
+    siteName: site.name,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${site.name} — ${site.role}`,
+    description: site.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+    },
+  },
+  icons: {
+    icon: [
+      { url: "/favicon-32.png", type: "image/png", sizes: "32x32" },
+      { url: "/favicon-192.png", type: "image/png", sizes: "192x192" },
+      { url: "/icon-512.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180" }],
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f7f6f2" },
+    { media: "(prefers-color-scheme: dark)", color: "#09090b" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+};
+
+// Inline script: applies the stored theme before paint to avoid FOUC.
+const themeScript = `
+(function() {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'dark') document.documentElement.classList.add('dark');
+  } catch (e) {}
+})();
+`;
+
+// JSON-LD structured data for richer search results.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: site.name,
+  jobTitle: site.role,
+  email: `mailto:${site.email}`,
+  url: site.url,
+  sameAs: [site.instagram, site.linkedin],
+  knowsAbout: [
+    "Next.js",
+    "React",
+    "TypeScript",
+    "Firebase",
+    "PostgreSQL",
+    "Desenvolvimento Web",
+    "Sistemas administrativos",
+  ],
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <html
+      lang="pt-BR"
+      className={`${display.variable} ${sans.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
+      <body className="antialiased">
+        {children}
+
+        {/* Google Ads (gtag.js) — carrega depois que a página fica
+            interativa, para não competir com a renderização. */}
+        {site.googleAdsId && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${site.googleAdsId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-ads" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${site.googleAdsId}');
+              `}
+            </Script>
+          </>
+        )}
+      </body>
+    </html>
+  );
+}

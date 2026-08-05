@@ -1,0 +1,156 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   BLUEPRINT EDITORIAL — Design tokens
+   Light "paper" base by default. Dark is an optional variant.
+   Colors are stored as raw RGB channels so Tailwind's
+   `<alpha-value>` syntax works (e.g. text-electric/40).
+   ============================================================ */
+:root {
+  --paper: 247 246 242; /* warm off-white "paper" */
+  --ink: 12 12 14; /* near-black ink */
+  --graphite: 58 58 64; /* graphite gray */
+  --mist: 110 110 120; /* muted body text */
+  --line: 18 18 22; /* hairline rules (used at low alpha) */
+  --electric: 240 78 12; /* brand orange accent (from logomarca) */
+
+  --grid-alpha: 0.045;
+  --selection: 240 78 12;
+}
+
+.dark {
+  --paper: 9 9 11; /* deep ink background */
+  --ink: 244 244 246; /* paper-white text */
+  --graphite: 176 176 186;
+  --mist: 138 138 150;
+  --line: 255 255 255;
+  --electric: 250 108 40; /* brighter brand orange for dark bg */
+
+  --grid-alpha: 0.06;
+}
+
+* {
+  border-color: rgb(var(--line) / 0.1);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: rgb(var(--paper));
+  color: rgb(var(--ink));
+  font-family: var(--font-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+  transition: background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+::selection {
+  background-color: rgb(var(--selection) / 0.95);
+  color: #ffffff;
+}
+
+/* Honor reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   Reusable layout & decorative utilities
+   ============================================================ */
+@layer components {
+  .container-grid {
+    @apply mx-auto w-full max-w-grid px-6 sm:px-8 lg:px-14;
+  }
+
+  /* Technical monospace eyebrow label: "01 — SOBRE" */
+  .eyebrow {
+    @apply inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.28em] text-mist;
+  }
+
+  .eyebrow::before {
+    content: "";
+    @apply h-px w-8 bg-electric;
+  }
+
+  /* Blueprint grid background, drawn with two layers of hairlines */
+  .blueprint {
+    background-image: linear-gradient(
+        to right,
+        rgb(var(--line) / var(--grid-alpha)) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        rgb(var(--line) / var(--grid-alpha)) 1px,
+        transparent 1px
+      );
+    background-size: 88px 88px;
+  }
+
+  .blueprint-fade {
+    -webkit-mask-image: radial-gradient(
+      ellipse 80% 60% at 50% 35%,
+      black 30%,
+      transparent 80%
+    );
+    mask-image: radial-gradient(
+      ellipse 80% 60% at 50% 35%,
+      black 30%,
+      transparent 80%
+    );
+  }
+
+  /* Big editorial display type */
+  .display {
+    @apply font-display font-semibold tracking-tightest leading-[0.92];
+  }
+
+  /* Thin underline that animates on hover for nav/links */
+  .link-underline {
+    @apply relative inline-block;
+  }
+  .link-underline::after {
+    content: "";
+    @apply absolute -bottom-0.5 left-0 h-px w-full origin-right scale-x-0 bg-current transition-transform duration-500 ease-editorial;
+  }
+  .link-underline:hover::after {
+    @apply origin-left scale-x-100;
+  }
+
+  /* Outlined "ghost" number used as a decorative index */
+  .ghost-number {
+    -webkit-text-stroke: 1.5px rgb(var(--ink) / 0.16);
+    color: transparent;
+  }
+}
+
+/* Slim custom scrollbar to match the editorial feel */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: rgb(var(--paper));
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--ink) / 0.18);
+  border: 3px solid rgb(var(--paper));
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--electric) / 0.6);
+}

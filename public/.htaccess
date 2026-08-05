@@ -1,0 +1,72 @@
+# =====================================================================
+#  devjoaorobson.com.br — Hostinger (hospedagem compartilhada / LiteSpeed)
+#  Este arquivo mora em /public, então o `next build` já o copia para
+#  /out a cada build. Envie-o junto com o resto para public_html.
+# =====================================================================
+
+# --- HTTPS + domínio canônico sem www --------------------------------
+# ATENÇÃO: só deixe estas regras ativas depois que o SSL estiver emitido
+# no hPanel. Se subir antes, o navegador entra em loop de redirecionamento.
+# Para desativar temporariamente, comente as 6 linhas abaixo com "#".
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# --- Página de erro --------------------------------------------------
+ErrorDocument 404 /404.html
+
+# --- Tipos de arquivo ------------------------------------------------
+# Servidores compartilhados nem sempre servem WebP/woff2 por padrão, o que
+# faz a imagem funcionar no localhost e quebrar no ar.
+<IfModule mod_mime.c>
+  AddType image/webp                 .webp
+  AddType image/svg+xml              .svg
+  AddType font/woff2                 .woff2
+  AddType application/manifest+json  .webmanifest
+</IfModule>
+
+# --- Compressão ------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+  AddOutputFilterByType DEFLATE application/javascript text/javascript
+  AddOutputFilterByType DEFLATE application/json application/xml image/svg+xml
+</IfModule>
+
+# --- Cache -----------------------------------------------------------
+# Tudo em /_next/static tem hash no nome do arquivo: quando o conteúdo muda,
+# o nome muda junto. Por isso pode ficar em cache longo com segurança.
+# O HTML NÃO entra em cache, senão o visitante continua vendo a versão antiga
+# depois de você publicar uma atualização.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/webp             "access plus 1 year"
+  ExpiresByType image/png              "access plus 1 year"
+  ExpiresByType image/svg+xml          "access plus 1 year"
+  ExpiresByType font/woff2             "access plus 1 year"
+  ExpiresByType text/css               "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType text/html              "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|woff2|webp|png|svg)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  # Cabeçalhos básicos de segurança
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# --- Listagem de diretório -------------------------------------------
+Options -Indexes
