@@ -2,10 +2,6 @@ import type { ReactNode } from "react";
 import { Reveal } from "./Reveal";
 
 type SectionHeadingProps = {
-  /** Monospace index, e.g. "01". */
-  index: string;
-  /** Eyebrow label, e.g. "SOBRE". */
-  label: string;
   /** Main heading content. */
   title: ReactNode;
   /** Optional supporting paragraph. */
@@ -15,12 +11,10 @@ type SectionHeadingProps = {
 };
 
 /**
- * Shared editorial section header: monospace eyebrow + oversized title.
- * Keeps every section visually consistent with the blueprint identity.
+ * Shared editorial section header: oversized title with optional intro.
+ * Keeps every section visually consistent.
  */
 export function SectionHeading({
-  index,
-  label,
   title,
   intro,
   align = "left",
@@ -33,18 +27,12 @@ export function SectionHeading({
       } ${className}`}
     >
       <Reveal from="up">
-        <span className="eyebrow">
-          <span className="text-electric">{index}</span>
-          <span className="!ml-0">— {label}</span>
-        </span>
-      </Reveal>
-      <Reveal from="up" delay={0.05}>
         <h2 className="display text-4xl sm:text-5xl lg:text-6xl max-w-4xl">
           {title}
         </h2>
       </Reveal>
       {intro ? (
-        <Reveal from="up" delay={0.1}>
+        <Reveal from="up" delay={0.05}>
           <p className="max-w-xl text-base leading-relaxed text-mist sm:text-lg">
             {intro}
           </p>

@@ -15,18 +15,12 @@ export function About() {
       />
 
       <div className="container-grid grid grid-cols-12 gap-x-6 gap-y-14">
-        {/* Left — label + ghost number */}
+        {/* Left — logo + short intro */}
         <div className="col-span-12 lg:col-span-4">
           <Reveal>
-            <span className="eyebrow">
-              <span className="text-electric">01</span>
-              <span className="!ml-0">— SOBRE</span>
-            </span>
+            <Logo className="h-auto w-full max-w-sm select-none object-contain" />
           </Reveal>
           <Reveal delay={0.05}>
-            <Logo className="mt-8 h-auto w-full max-w-sm select-none object-contain" />
-          </Reveal>
-          <Reveal delay={0.1}>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-mist">
               Desenvolvedor full stack focado em construir produtos digitais que
               resolvem problemas reais de negócio.

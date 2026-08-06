@@ -44,8 +44,6 @@ export function Contact() {
     <section id="contato" className="relative py-14 sm:py-20">
       <div className="container-grid">
         <SectionHeading
-          index="07"
-          label="CONTATO"
           title={
             <>
               Vamos conversar sobre{" "}

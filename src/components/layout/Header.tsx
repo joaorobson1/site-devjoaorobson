@@ -65,11 +65,8 @@ export function Header() {
             <a
               key={link.id}
               href={`#${link.id}`}
-              className="group flex items-baseline gap-1.5 text-sm text-ink/80 transition-colors hover:text-ink"
+              className="group flex items-baseline text-sm text-ink/80 transition-colors hover:text-ink"
             >
-              <span className="font-mono text-[10px] text-electric">
-                {link.index}
-              </span>
               <span className="link-underline">{link.label}</span>
             </a>
           ))}
@@ -130,9 +127,6 @@ export function Header() {
                   className="flex items-baseline justify-between border-b border-ink/10 py-5"
                 >
                   <span className="display text-3xl">{link.label}</span>
-                  <span className="font-mono text-xs text-electric">
-                    {link.index}
-                  </span>
                 </motion.a>
               ))}
               <motion.a

@@ -29,13 +29,6 @@ export function CTA() {
 
         <div className="relative flex flex-col items-start gap-10">
           <Reveal>
-            <span className="eyebrow text-paper/60">
-              <span className="text-electric">06</span>
-              <span className="!ml-0">— VAMOS COMEÇAR</span>
-            </span>
-          </Reveal>
-
-          <Reveal delay={0.05}>
             <h2 className="display max-w-4xl text-[clamp(2.2rem,6vw,5rem)] text-paper">
               Seu próximo sistema pode{" "}
               <span className="text-electric">começar hoje.</span>

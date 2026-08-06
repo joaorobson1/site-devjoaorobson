@@ -22,8 +22,6 @@ export function Process() {
     <section id="processo" className="relative py-14 sm:py-20">
       <div className="container-grid">
         <SectionHeading
-          index="04"
-          label="PROCESSO"
           title={
             <>
               Do briefing à{" "}

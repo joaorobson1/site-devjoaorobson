@@ -13,8 +13,6 @@ export function Differentials() {
     >
       <div className="container-grid">
         <SectionHeading
-          index="05"
-          label="DIFERENCIAIS"
           title={
             <>
               Por que trabalhar{" "}

@@ -22,8 +22,6 @@ export function Portfolio() {
       <div className="container-grid">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeading
-            index="03"
-            label="PORTFÓLIO"
             title={
               <>
                 Projetos & <span className="text-electric">cases</span>

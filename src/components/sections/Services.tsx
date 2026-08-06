@@ -13,8 +13,6 @@ export function Services() {
     <section id="servicos" className="relative py-14 sm:py-20">
       <div className="container-grid">
         <SectionHeading
-          index="02"
-          label="SERVIÇOS"
           title={
             <>
               O que eu construo para{" "}
