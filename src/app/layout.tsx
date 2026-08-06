@@ -155,6 +155,15 @@ export default function RootLayout({
                 gtag('config', '${site.googleAdsId}');
               `}
             </Script>
+            {/* Ação de conversão "Contato". Vem depois do config: os scripts
+                com a mesma strategy executam na ordem em que aparecem. */}
+            {site.googleAdsConversion && (
+              <Script id="google-ads-conversao" strategy="afterInteractive">
+                {`
+                  gtag('event', 'conversion', {'send_to': '${site.googleAdsConversion}'});
+                `}
+              </Script>
+            )}
           </>
         )}
 

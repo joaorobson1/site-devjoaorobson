@@ -22,6 +22,8 @@ export const site = {
   location: "Brasil — atendimento remoto",
   // Tag global do Google Ads (gtag.js). Deixe "" para desativar o script.
   googleAdsId: "AW-18311654258",
+  // Ação de conversão "Contato". Dispara no carregamento da página.
+  googleAdsConversion: "AW-18311654258/hIBaCLz5kd0cEPLW1ptE",
   // Pixel do Facebook/Meta. Deixe "" para desativar o script.
   facebookPixelId: "2218978372284252",
   tagline: "Transformo ideias em sistemas que geram resultados.",
