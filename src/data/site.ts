@@ -22,6 +22,8 @@ export const site = {
   location: "Brasil — atendimento remoto",
   // Tag global do Google Ads (gtag.js). Deixe "" para desativar o script.
   googleAdsId: "AW-18311654258",
+  // Pixel do Facebook/Meta. Deixe "" para desativar o script.
+  facebookPixelId: "2218978372284252",
   tagline: "Transformo ideias em sistemas que geram resultados.",
   description:
     "Desenvolvimento de landing pages, sistemas web e soluções digitais sob medida para empresas e empreendedores. Full Stack com Next.js, React e diversos bancos de dados.",
@@ -43,9 +45,9 @@ export const mailtoLink = (
   )}&body=${encodeURIComponent(body)}`;
 
 export const navLinks = [
-  { id: "sobre", label: "Sobre", index: "01" },
-  { id: "servicos", label: "Serviços", index: "02" },
-  { id: "portfolio", label: "Portfólio", index: "03" },
-  { id: "processo", label: "Processo", index: "04" },
-  { id: "contato", label: "Contato", index: "05" },
+  { id: "sobre", label: "Sobre" },
+  { id: "servicos", label: "Serviços" },
+  { id: "portfolio", label: "Portfólio" },
+  { id: "processo", label: "Processo" },
+  { id: "contato", label: "Contato" },
 ] as const;
