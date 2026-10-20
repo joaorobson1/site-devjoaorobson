@@ -1,119 +1,100 @@
-# Portfólio — João Robson Antunes
+# devjoaorobson.com.br
 
-Site pessoal de desenvolvedor full stack freelancer, no ar em
-[devjoaorobson.com.br](https://devjoaorobson.com.br).
+Código do meu site profissional. Sou desenvolvedor full stack e atendo como
+freelancer: landing pages, sites institucionais e sistemas web sob medida.
 
-## Conceito visual
+**Site:** [devjoaorobson.com.br](https://devjoaorobson.com.br)
 
-A identidade é um "neon editorial": base escura, tipografia grande e o laranja
-da logomarca expandido num gradiente quente (âmbar → laranja → rosa).
+![Página inicial do site](docs/preview.jpg)
 
-- Tema escuro por padrão, com tema claro opcional pelo toggle no header.
-- Fundo com grid luminoso, manchas "aurora" animadas e granulação sutil.
-- Seções em bento grid; os cards acendem sob o cursor (`Spotlight`).
-- Tipografia: Bricolage Grotesque (títulos), Inter (texto corrido) e
-  JetBrains Mono (labels técnicos).
-- Botão flutuante de WhatsApp após o hero, contadores animados e CTA com
-  borda em gradiente giratório.
+## Tecnologias
 
-| Token      | Light     | Dark      |
-| ---------- | --------- | --------- |
-| `paper`    | `#fafaf8` | `#07070a` |
-| `surface`  | `#ffffff` | `#101015` |
-| `ink`      | `#0c0c10` | `#f5f5f7` |
-| `electric` | `#f04e0c` | `#ff5e1a` |
-| `amber`    | `#ec8e00` | `#ffb224` |
-| `rose`     | `#e42a60` | `#ff4076` |
+- [Next.js 15](https://nextjs.org) com App Router, exportado como site estático
+- React 19 e TypeScript
+- Tailwind CSS 3
+- Framer Motion para as animações
 
-## Stack
-
-- Next.js 15 (App Router)
-- React 19 + TypeScript
-- Tailwind CSS 3.4
-- Framer Motion 11
+Não há back-end. O build gera HTML, CSS e JS puros, que rodam em qualquer
+hospedagem compartilhada.
 
 ## Rodando localmente
 
+Requer Node.js 18.18 ou mais recente.
+
 ```bash
 npm install
-npm run dev      # http://localhost:3000
-npm run build    # gera a versão de produção em out/
+npm run dev
 ```
+
+O site abre em `http://localhost:3000`.
+
+| Comando            | O que faz                                        |
+| ------------------ | ------------------------------------------------ |
+| `npm run dev`      | Servidor de desenvolvimento                      |
+| `npm run build`    | Gera a versão de produção na pasta `out/`        |
+| `npm run lint`     | Verifica o código com ESLint                     |
+| `npm run shots`    | Tira prints dos projetos do portfólio            |
+| `npm run optimize` | Converte os prints em WebP                       |
 
 ## Estrutura
 
 ```
 src/
-├─ app/
-│  ├─ layout.tsx        # fontes, SEO, JSON-LD, theme script, gtag
-│  ├─ page.tsx          # composição das seções
-│  ├─ globals.css       # tokens, gradientes, utilitários
-│  ├─ sitemap.ts / robots.ts
-├─ components/
-│  ├─ layout/           # Header, Footer
-│  ├─ sections/         # Hero, About, Services, Portfolio, Process,
-│  │                    #   Differentials, CTA, Contact
-│  └─ ui/               # Reveal, MagneticButton, ThemeToggle, Spotlight,
-│                       #   SectionHeading, Marquee, Logo, Icons,
-│                       #   CountUp, WhatsAppFab
-└─ data/
-   ├─ site.ts           # contato, redes sociais, navegação, Google Ads
-   ├─ content.ts        # serviços, processo, diferenciais
-   └─ projects.ts       # projetos do portfólio
+├── app/            layout, SEO, estilos globais, sitemap e robots
+├── components/
+│   ├── layout/     cabeçalho e rodapé
+│   ├── sections/   seções da página inicial
+│   └── ui/         componentes reutilizáveis
+└── data/           textos, contatos e projetos
 ```
 
-## Personalização
+Os textos ficam separados dos componentes. Para mudar conteúdo, quase sempre
+basta editar um arquivo em `src/data/`:
 
-**Contato e redes:** [`src/data/site.ts`](src/data/site.ts) — e-mail, WhatsApp
-(formato internacional, ex. `5599999999999`), Instagram, LinkedIn, domínio e ID
-do Google Ads.
+- `site.ts`: nome, contatos, redes sociais e IDs do Google Ads e do Meta Pixel
+- `content.ts`: serviços, etapas do processo, diferenciais e números
+- `projects.ts`: projetos do portfólio
 
-**Projetos do portfólio:** [`src/data/projects.ts`](src/data/projects.ts):
+### Adicionando um projeto
+
+Inclua um objeto na lista de `src/data/projects.ts`:
 
 ```ts
 {
-  id: "meu-projeto",
+  id: "nome-do-projeto",
   name: "Nome do Projeto",
   category: "Landing Page",
-  description: "Descrição curta do case.",
-  technologies: ["Next.js", "Firebase"],
-  image: "/projetos/meu-projeto.webp", // vazio = placeholder de blueprint
-  link: "https://...",                  // opcional
-  year: "2025",
-  featured: true,                       // ocupa 2 colunas no grid
+  description: "Uma ou duas frases sobre o projeto.",
+  technologies: ["Next.js", "Tailwind"],
+  image: "/projetos/nome-do-projeto.webp",
+  link: "https://exemplo.com.br",
+  year: "2026",
+  featured: true, // opcional, deixa o título maior
 }
 ```
 
-**Serviços, processo e diferenciais:** [`src/data/content.ts`](src/data/content.ts).
+As categorias do filtro são geradas a partir dos projetos cadastrados. Sem
+imagem (`image: ""`), o card mostra as iniciais do projeto no lugar do print.
 
-## Deploy
+Como o export estático não otimiza imagens, elas precisam entrar prontas em
+`public/projetos/`. O caminho mais rápido é adicionar o endereço do site em
+`scripts/capture-shots.mjs` e rodar `npm run shots` e depois `npm run optimize`.
 
-O projeto usa `output: "export"` ([`next.config.mjs`](next.config.mjs)): o build
-gera HTML estático em `out/`, que roda em hospedagem compartilhada
-Apache/LiteSpeed sem precisar de Node no servidor.
+## Publicação
 
-```bash
-npm run build
-```
+O site está hospedado na Hostinger.
 
-Depois é só enviar **o conteúdo de `out/`** para `public_html`. O `.htaccess`
-mora em `public/` e o build o copia junto — ele cuida do redirecionamento para
-HTTPS, do domínio canônico sem `www`, do cache e do MIME de WebP.
+1. Rode `npm run build`.
+2. Envie **o conteúdo** da pasta `out/` para `public_html`.
 
-### Trocando as imagens do portfólio
+O arquivo `public/.htaccess` vai junto no build e cuida do redirecionamento
+para HTTPS, da remoção do `www`, do cache dos arquivos estáticos e da
+página 404.
 
-Como o export estático não usa o otimizador do `next/image`, as imagens
-precisam ir prontas:
+Para publicar na Vercel, remova `output: "export"` e `images.unoptimized` do
+`next.config.mjs`.
 
-```bash
-npm run shots      # captura os prints dos sites listados no script
-npm run optimize   # converte os PNGs em WebP redimensionado
-```
+## Licença
 
-Em seguida aponte `image:` para o `.webp` em `projects.ts` e remova o `.png`
-original de `public/`, que serve apenas de intermediário.
-
-### Voltando para a Vercel
-
-Basta remover `output: "export"` e `images.unoptimized` do `next.config.mjs`
-para reativar a otimização de imagens sob demanda.
+O código pode servir de referência. Textos, imagens, logomarca e os prints de
+projetos de clientes não estão liberados para reutilização.
