@@ -22,12 +22,13 @@ type MagneticButtonProps = {
 };
 
 const base =
-  "group relative inline-flex items-center justify-center gap-3 rounded-full px-7 py-3.5 font-mono text-[12px] uppercase tracking-[0.2em] transition-colors duration-300 ease-editorial focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric focus-visible:ring-offset-2 focus-visible:ring-offset-paper";
+  "group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full px-7 py-4 text-[15px] font-semibold transition-all duration-300 ease-editorial focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric focus-visible:ring-offset-2 focus-visible:ring-offset-paper";
 
 const variants: Record<Variant, string> = {
-  solid: "bg-ink text-paper hover:bg-electric",
+  solid:
+    "bg-brand-gradient text-white shadow-[0_10px_40px_-10px_rgb(var(--electric)/0.8)] hover:shadow-[0_14px_50px_-8px_rgb(var(--electric)/0.95)] hover:brightness-110",
   outline:
-    "border border-ink/25 text-ink hover:border-electric hover:text-electric",
+    "border border-line/15 bg-surface/50 text-ink backdrop-blur hover:border-electric/60 hover:bg-surface",
   ghost: "text-ink hover:text-electric",
 };
 
@@ -69,7 +70,16 @@ export function MagneticButton({
   const classes = `${base} ${variants[variant]} ${className}`;
 
   const content = (
-    <span className="relative z-10 flex items-center gap-3">{children}</span>
+    <>
+      {/* Light sweep across the gradient button */}
+      {variant === "solid" && (
+        <span
+          aria-hidden
+          className="absolute inset-y-0 left-0 w-1/3 animate-shine bg-gradient-to-r from-transparent via-white/35 to-transparent"
+        />
+      )}
+      <span className="relative z-10 flex items-center gap-3">{children}</span>
+    </>
   );
 
   const inner = (

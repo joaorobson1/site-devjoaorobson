@@ -1,14 +1,15 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
+import { Bricolage_Grotesque, Inter, JetBrains_Mono } from "next/font/google";
 import { site } from "@/data/site";
+import { WhatsAppFab } from "@/components/ui/WhatsAppFab";
 import "./globals.css";
 
-const display = Space_Grotesk({
+const display = Bricolage_Grotesque({
   subsets: ["latin"],
   variable: "--font-display",
   display: "swap",
-  weight: ["500", "600", "700"],
+  weight: ["500", "600", "700", "800"],
 });
 
 const sans = Inter({
@@ -83,19 +84,19 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f7f6f2" },
-    { media: "(prefers-color-scheme: dark)", color: "#09090b" },
+    { media: "(prefers-color-scheme: light)", color: "#07070a" },
+    { media: "(prefers-color-scheme: dark)", color: "#07070a" },
   ],
   width: "device-width",
   initialScale: 1,
 };
 
-// Inline script: applies the stored theme before paint to avoid FOUC.
+// Inline script: dark is the default (set on <html> server-side); this only
+// removes it before paint when the visitor picked the light theme.
 const themeScript = `
 (function() {
   try {
-    var t = localStorage.getItem('theme');
-    if (t === 'dark') document.documentElement.classList.add('dark');
+    if (localStorage.getItem('theme') === 'light') document.documentElement.classList.remove('dark');
   } catch (e) {}
 })();
 `;
@@ -126,7 +127,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${display.variable} ${sans.variable} ${mono.variable}`}
+      className={`dark ${display.variable} ${sans.variable} ${mono.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -138,6 +139,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         {children}
+        <WhatsAppFab />
 
         {/* Google Ads (gtag.js) — carrega depois que a página fica
             interativa, para não competir com a renderização. */}

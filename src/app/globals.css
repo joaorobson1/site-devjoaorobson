@@ -3,32 +3,41 @@
 @tailwind utilities;
 
 /* ============================================================
-   BLUEPRINT EDITORIAL — Design tokens
-   Light "paper" base by default. Dark is an optional variant.
+   NEON EDITORIAL — Design tokens
+   Dark "night" base by default; light is the optional variant.
    Colors are stored as raw RGB channels so Tailwind's
    `<alpha-value>` syntax works (e.g. text-electric/40).
    ============================================================ */
 :root {
-  --paper: 247 246 242; /* warm off-white "paper" */
-  --ink: 12 12 14; /* near-black ink */
-  --graphite: 58 58 64; /* graphite gray */
-  --mist: 110 110 120; /* muted body text */
-  --line: 18 18 22; /* hairline rules (used at low alpha) */
-  --electric: 240 78 12; /* brand orange accent (from logomarca) */
+  --paper: 250 250 248; /* page background */
+  --surface: 255 255 255; /* cards */
+  --ink: 12 12 16; /* primary text */
+  --graphite: 60 60 68;
+  --mist: 98 98 110; /* muted body text */
+  --line: 12 12 16; /* hairlines (used at low alpha) */
+  --electric: 240 78 12; /* brand orange (from logomarca) */
+  --amber: 236 142 0;
+  --rose: 228 42 96;
 
-  --grid-alpha: 0.045;
-  --selection: 240 78 12;
+  --grid-alpha: 0.05;
+  --glow-alpha: 0.22;
+  --grain-alpha: 0.025;
 }
 
 .dark {
-  --paper: 9 9 11; /* deep ink background */
-  --ink: 244 244 246; /* paper-white text */
-  --graphite: 176 176 186;
-  --mist: 138 138 150;
+  --paper: 7 7 10;
+  --surface: 16 16 21;
+  --ink: 245 245 247;
+  --graphite: 196 196 206;
+  --mist: 150 150 164;
   --line: 255 255 255;
-  --electric: 250 108 40; /* brighter brand orange for dark bg */
+  --electric: 255 94 26;
+  --amber: 255 178 36;
+  --rose: 255 64 118;
 
-  --grid-alpha: 0.06;
+  --grid-alpha: 0.055;
+  --glow-alpha: 0.38;
+  --grain-alpha: 0.045;
 }
 
 * {
@@ -37,6 +46,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 96px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -51,8 +61,19 @@ body {
     color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Film grain over everything — gives the flat dark a tactile, premium feel */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: var(--grain-alpha);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 ::selection {
-  background-color: rgb(var(--selection) / 0.95);
+  background-color: rgb(var(--electric) / 0.95);
   color: #ffffff;
 }
 
@@ -73,21 +94,51 @@ body {
    ============================================================ */
 @layer components {
   .container-grid {
-    @apply mx-auto w-full max-w-grid px-6 sm:px-8 lg:px-14;
+    @apply mx-auto w-full max-w-grid px-5 sm:px-8 lg:px-12;
   }
 
-  /* Technical monospace eyebrow label: "01 — SOBRE" */
+  /* Pill label above section titles */
   .eyebrow {
-    @apply inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.28em] text-mist;
+    @apply inline-flex items-center gap-2 rounded-full border border-line/10 bg-surface/60 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-graphite backdrop-blur;
   }
 
   .eyebrow::before {
     content: "";
-    @apply h-px w-8 bg-electric;
+    @apply h-1.5 w-1.5 rounded-full bg-electric shadow-[0_0_10px_rgb(var(--electric))];
   }
 
-  /* Blueprint grid background, drawn with two layers of hairlines */
-  .blueprint {
+  /* Big display type */
+  .display {
+    @apply font-display font-bold tracking-tightest leading-[0.95];
+  }
+
+  /* Animated brand gradient text */
+  .text-gradient {
+    background-image: linear-gradient(
+      100deg,
+      rgb(var(--amber)) 0%,
+      rgb(var(--electric)) 40%,
+      rgb(var(--rose)) 75%,
+      rgb(var(--electric)) 100%
+    );
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    @apply animate-gradient-pan;
+  }
+
+  .bg-brand-gradient {
+    background-image: linear-gradient(
+      110deg,
+      rgb(var(--amber)),
+      rgb(var(--electric)) 45%,
+      rgb(var(--rose))
+    );
+  }
+
+  /* Glowing grid backdrop, faded toward the edges */
+  .grid-bg {
     background-image: linear-gradient(
         to right,
         rgb(var(--line) / var(--grid-alpha)) 1px,
@@ -98,25 +149,64 @@ body {
         rgb(var(--line) / var(--grid-alpha)) 1px,
         transparent 1px
       );
-    background-size: 88px 88px;
-  }
-
-  .blueprint-fade {
+    background-size: 72px 72px;
     -webkit-mask-image: radial-gradient(
-      ellipse 80% 60% at 50% 35%,
-      black 30%,
-      transparent 80%
+      ellipse 70% 60% at 50% 30%,
+      black 25%,
+      transparent 75%
     );
     mask-image: radial-gradient(
-      ellipse 80% 60% at 50% 35%,
-      black 30%,
-      transparent 80%
+      ellipse 70% 60% at 50% 30%,
+      black 25%,
+      transparent 75%
     );
   }
 
-  /* Big editorial display type */
-  .display {
-    @apply font-display font-semibold tracking-tightest leading-[0.92];
+  /* Base card surface */
+  .card {
+    @apply relative overflow-hidden rounded-3xl border border-line/10 bg-surface/70 backdrop-blur-sm transition-[border-color,transform,box-shadow] duration-500 ease-editorial;
+  }
+  .card:hover {
+    @apply border-electric/40;
+    box-shadow: 0 20px 60px -30px rgb(var(--electric) / var(--glow-alpha));
+  }
+
+  /* Cursor-following light inside cards (vars set by <Spotlight>) */
+  .spotlight::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s;
+    background: radial-gradient(
+      420px circle at var(--mx, 50%) var(--my, 50%),
+      rgb(var(--electric) / 0.14),
+      transparent 60%
+    );
+  }
+  .spotlight:hover::before {
+    opacity: 1;
+  }
+
+  /* Rotating conic gradient border (wrap content in .glow-ring > .glow-inner) */
+  .glow-ring {
+    @apply relative overflow-hidden rounded-[2rem] p-px;
+  }
+  .glow-ring::before {
+    content: "";
+    position: absolute;
+    inset: -150%;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      rgb(var(--amber)) 60deg,
+      rgb(var(--electric)) 120deg,
+      rgb(var(--rose)) 180deg,
+      transparent 240deg
+    );
+    @apply animate-spin-slow;
   }
 
   /* Thin underline that animates on hover for nav/links */
@@ -131,14 +221,14 @@ body {
     @apply origin-left scale-x-100;
   }
 
-  /* Outlined "ghost" number used as a decorative index */
-  .ghost-number {
-    -webkit-text-stroke: 1.5px rgb(var(--ink) / 0.16);
+  /* Outlined display text */
+  .text-outline {
+    -webkit-text-stroke: 1.5px rgb(var(--ink) / 0.18);
     color: transparent;
   }
 }
 
-/* Slim custom scrollbar to match the editorial feel */
+/* Slim custom scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -152,5 +242,5 @@ body {
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(var(--electric) / 0.6);
+  background: rgb(var(--electric) / 0.7);
 }

@@ -5,23 +5,25 @@ Site pessoal de desenvolvedor full stack freelancer, no ar em
 
 ## Conceito visual
 
-A identidade parte de uma ideia de "blueprint editorial" — planta de engenharia
-somada a diagramação editorial:
+A identidade é um "neon editorial": base escura, tipografia grande e o laranja
+da logomarca expandido num gradiente quente (âmbar → laranja → rosa).
 
-- Base clara em tom de papel (off-white), com dark mode opcional pelo toggle no
-  header.
-- Grid de blueprint discreto ao fundo.
-- Tipografia contrastante: Space Grotesk (títulos), Inter (texto corrido) e
-  JetBrains Mono (labels técnicos, `01 — SOBRE`).
-- Laranja da logomarca como única cor de destaque.
-- Layout assimétrico, bastante respiro e animações contidas.
+- Tema escuro por padrão, com tema claro opcional pelo toggle no header.
+- Fundo com grid luminoso, manchas "aurora" animadas e granulação sutil.
+- Seções em bento grid; os cards acendem sob o cursor (`Spotlight`).
+- Tipografia: Bricolage Grotesque (títulos), Inter (texto corrido) e
+  JetBrains Mono (labels técnicos).
+- Botão flutuante de WhatsApp após o hero, contadores animados e CTA com
+  borda em gradiente giratório.
 
-| Token      | Light         | Dark        |
-| ---------- | ------------- | ----------- |
-| `paper`    | `#f7f6f2`     | `#09090b`   |
-| `ink`      | `#0c0c0e`     | `#f4f4f6`   |
-| `graphite` | cinza grafite | cinza claro |
-| `electric` | `#f04e0c`     | `#fa6c28`   |
+| Token      | Light     | Dark      |
+| ---------- | --------- | --------- |
+| `paper`    | `#fafaf8` | `#07070a` |
+| `surface`  | `#ffffff` | `#101015` |
+| `ink`      | `#0c0c10` | `#f5f5f7` |
+| `electric` | `#f04e0c` | `#ff5e1a` |
+| `amber`    | `#ec8e00` | `#ffb224` |
+| `rose`     | `#e42a60` | `#ff4076` |
 
 ## Stack
 
@@ -45,14 +47,15 @@ src/
 ├─ app/
 │  ├─ layout.tsx        # fontes, SEO, JSON-LD, theme script, gtag
 │  ├─ page.tsx          # composição das seções
-│  ├─ globals.css       # tokens, blueprint, utilitários
+│  ├─ globals.css       # tokens, gradientes, utilitários
 │  ├─ sitemap.ts / robots.ts
 ├─ components/
 │  ├─ layout/           # Header, Footer
 │  ├─ sections/         # Hero, About, Services, Portfolio, Process,
 │  │                    #   Differentials, CTA, Contact
-│  └─ ui/               # Reveal, MagneticButton, ThemeToggle,
-│                       #   SectionHeading, Marquee, Logo
+│  └─ ui/               # Reveal, MagneticButton, ThemeToggle, Spotlight,
+│                       #   SectionHeading, Marquee, Logo, Icons,
+│                       #   CountUp, WhatsAppFab
 └─ data/
    ├─ site.ts           # contato, redes sociais, navegação, Google Ads
    ├─ content.ts        # serviços, processo, diferenciais

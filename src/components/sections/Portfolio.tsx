@@ -4,6 +4,8 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Spotlight } from "@/components/ui/Spotlight";
+import { Icon } from "@/components/ui/Icons";
 import { projects, projectCategories, type Project } from "@/data/projects";
 
 export function Portfolio() {
@@ -18,39 +20,44 @@ export function Portfolio() {
   );
 
   return (
-    <section id="portfolio" className="relative py-14 sm:py-20">
+    <section id="portfolio" className="relative py-16 sm:py-24">
       <div className="container-grid">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeading
+            eyebrow="Portfólio"
             title={
               <>
-                Projetos & <span className="text-electric">cases</span>
+                Projetos & <span className="text-gradient">cases</span>
               </>
             }
             intro="Uma seleção de soluções entregues. Cada projeto foi desenhado para um objetivo específico de negócio."
           />
 
-          {/* Category filter */}
-          <div className="flex flex-wrap gap-2">
+          {/* Category filter — animated pill tabs */}
+          <div className="flex flex-wrap gap-1 self-start rounded-3xl border border-line/10 bg-surface/60 p-1 backdrop-blur lg:self-end">
             {projectCategories.map((cat) => (
               <button
                 key={cat}
                 type="button"
                 onClick={() => setFilter(cat)}
-                className={`rounded-full border px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] transition-colors duration-300 ${
-                  filter === cat
-                    ? "border-electric bg-electric text-white"
-                    : "border-ink/15 text-ink/65 hover:border-ink/40 hover:text-ink"
+                className={`relative rounded-full px-4 py-2 text-sm transition-colors duration-300 ${
+                  filter === cat ? "text-white" : "text-mist hover:text-ink"
                 }`}
               >
-                {cat}
+                {filter === cat && (
+                  <motion.span
+                    layoutId="portfolio-filter"
+                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                    className="bg-brand-gradient absolute inset-0 rounded-full"
+                  />
+                )}
+                <span className="relative">{cat}</span>
               </button>
             ))}
           </div>
         </div>
 
-        {/* Asymmetric grid: featured cards span 2 columns */}
-        <motion.ul layout className="mt-16 grid gap-6 md:grid-cols-2">
+        <motion.ul layout className="mt-14 grid gap-5">
           <AnimatePresence mode="popLayout">
             {visible.map((project, i) => (
               <motion.li
@@ -64,26 +71,17 @@ export function Portfolio() {
                   delay: i * 0.04,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-                className={project.featured ? "md:col-span-2" : ""}
               >
-                <ProjectCard project={project} />
+                <ProjectCard project={project} flip={i % 2 === 1} />
               </motion.li>
             ))}
           </AnimatePresence>
         </motion.ul>
 
-        {/*
-          NOTA PARA O DESENVOLVEDOR (não aparece para o cliente):
-          Esta área está pronta para receber novos projetos — basta cadastrá-los
-          em src/data/projects.ts. Cada objeto vira um card automaticamente.
-        */}
-        <p className="mt-12 max-w-xl text-sm leading-relaxed text-mist">
+        <p className="mt-12 max-w-xl text-base leading-relaxed text-mist">
           Cada projeto nasce de um objetivo claro: vender mais, organizar a
           operação ou economizar tempo. Quer ver o seu na lista?{" "}
-          <a
-            href="#contato"
-            className="link-underline text-ink"
-          >
+          <a href="#contato" className="link-underline font-medium text-electric">
             Vamos conversar
           </a>
           .
@@ -93,85 +91,110 @@ export function Portfolio() {
   );
 }
 
-function ProjectCard({ project }: { project: Project }) {
-  const hasLink = project.link && project.link !== "#";
-  const Wrapper = hasLink ? "a" : "div";
+function ProjectCard({ project, flip }: { project: Project; flip: boolean }) {
+  const hasLink = !!project.link && project.link !== "#";
+  const linkProps = hasLink
+    ? { href: project.link, target: "_blank", rel: "noopener noreferrer" }
+    : {};
 
   return (
-    <Wrapper
-      {...(hasLink
-        ? {
-            href: project.link,
-            target: "_blank",
-            rel: "noopener noreferrer",
-          }
-        : {})}
-      className="group block h-full overflow-hidden rounded-2xl border border-ink/12 bg-paper transition-colors duration-500 hover:border-electric/60"
+    <Spotlight
+      as={hasLink ? "a" : "div"}
+      {...linkProps}
+      className={`group grid h-full p-3 sm:p-4 lg:items-center lg:gap-6 ${
+        flip ? "lg:grid-cols-[1fr_1.45fr]" : "lg:grid-cols-[1.45fr_1fr]"
+      }`}
     >
-      {/* Visual */}
+      {/* Visual inside a browser frame */}
       <div
-        className={`relative overflow-hidden ${
-          project.featured ? "aspect-[16/8]" : "aspect-[16/10]"
+        className={`relative overflow-hidden rounded-2xl border border-line/10 bg-paper ${
+          flip ? "lg:order-2" : ""
         }`}
       >
-        {project.image ? (
-          <Image
-            src={project.image}
-            alt={project.name}
-            fill
-            quality={90}
-            sizes={
-              project.featured
-                ? "(max-width: 768px) 100vw, 1280px"
-                : "(max-width: 768px) 100vw, 640px"
-            }
-            className="object-cover transition-transform duration-700 ease-editorial group-hover:scale-[1.04]"
-          />
-        ) : (
-          <PlaceholderVisual name={project.name} />
-        )}
-
-        {/* Year badge */}
-        {project.year && (
-          <span className="absolute right-4 top-4 rounded-full bg-paper/90 px-3 py-1 font-mono text-[10px] tracking-[0.12em] text-ink backdrop-blur">
-            {project.year}
-          </span>
-        )}
+        <div className="flex items-center gap-1.5 border-b border-line/10 px-3 py-2">
+          <span className="h-2 w-2 rounded-full bg-ink/20" />
+          <span className="h-2 w-2 rounded-full bg-ink/20" />
+          <span className="h-2 w-2 rounded-full bg-ink/20" />
+          {project.link && (
+            <span className="ml-2 truncate font-mono text-[10px] text-mist">
+              {project.link.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+            </span>
+          )}
+        </div>
+        <div className="relative aspect-[16/10] overflow-hidden">
+          {project.image ? (
+            <Image
+              src={project.image}
+              alt={project.name}
+              fill
+              quality={90}
+              sizes="(max-width: 1024px) 100vw, 800px"
+              className="object-cover object-top transition-transform duration-[1.2s] ease-editorial group-hover:scale-[1.05]"
+            />
+          ) : (
+            <PlaceholderVisual name={project.name} />
+          )}
+          {/* Hover veil with call-to-action */}
+          {hasLink && (
+            <div className="absolute inset-0 flex items-end justify-start bg-gradient-to-t from-black/70 via-black/10 to-transparent p-5 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+              <span className="inline-flex translate-y-3 items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-black transition-transform duration-500 ease-editorial group-hover:translate-y-0">
+                Ver projeto
+                <Icon name="arrowUpRight" className="h-4 w-4" />
+              </span>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Meta */}
-      <div className="flex flex-col gap-4 p-6 sm:p-7">
-        <div className="flex items-center justify-between">
-          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-electric">
+      <div className="relative flex flex-col gap-4 px-3 pb-4 pt-6 sm:px-4 lg:px-6 lg:py-6">
+        <div className="flex items-center justify-between gap-3">
+          <span className="rounded-full bg-electric/10 px-3 py-1 text-xs font-medium text-electric ring-1 ring-electric/20">
             {project.category}
           </span>
-          <Arrow active={!!hasLink} />
+          {project.year && (
+            <span className="font-mono text-xs text-mist">{project.year}</span>
+          )}
         </div>
 
-        <h3 className="display text-2xl text-ink sm:text-3xl">
+        <h3
+          className={`display ${
+            project.featured ? "text-3xl sm:text-4xl" : "text-2xl sm:text-3xl"
+          }`}
+        >
           {project.name}
         </h3>
 
-        <p className="max-w-prose text-sm leading-relaxed text-mist">
+        <p className="text-sm leading-relaxed text-mist sm:text-base">
           {project.description}
         </p>
 
-        <ul className="mt-1 flex flex-wrap gap-2">
+        <ul className="flex flex-wrap gap-2">
           {project.technologies.map((tech) => (
             <li
               key={tech}
-              className="rounded-full border border-ink/12 px-2.5 py-1 font-mono text-[10px] tracking-[0.08em] text-ink/65"
+              className="rounded-full border border-line/10 px-2.5 py-1 font-mono text-[11px] text-graphite"
             >
               {tech}
             </li>
           ))}
         </ul>
+
+        {hasLink && (
+          <span className="mt-1 inline-flex items-center gap-2 text-sm font-semibold text-ink transition-colors group-hover:text-electric">
+            Acessar site
+            <Icon
+              name="arrowUpRight"
+              className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+            />
+          </span>
+        )}
       </div>
-    </Wrapper>
+    </Spotlight>
   );
 }
 
-/** Elegant blueprint placeholder shown until a real image is added. */
+/** Placeholder shown until a real image is added. */
 function PlaceholderVisual({ name }: { name: string }) {
   const initials = name
     .split(" ")
@@ -181,33 +204,12 @@ function PlaceholderVisual({ name }: { name: string }) {
     .toUpperCase();
 
   return (
-    <div className="blueprint absolute inset-0 flex items-center justify-center bg-ink/[0.03]">
-      <span className="ghost-number display text-6xl">{initials}</span>
-      <span className="absolute bottom-3 left-4 font-mono text-[9px] uppercase tracking-[0.18em] text-mist">
+    <div className="absolute inset-0 flex items-center justify-center bg-ink/[0.03]">
+      <div className="grid-bg absolute inset-0" />
+      <span className="text-outline display relative text-7xl">{initials}</span>
+      <span className="absolute bottom-3 left-4 font-mono text-[10px] uppercase tracking-[0.18em] text-mist">
         preview · em breve
       </span>
     </div>
-  );
-}
-
-function Arrow({ active }: { active: boolean }) {
-  return (
-    <span
-      className={`flex h-9 w-9 items-center justify-center rounded-full border transition-all duration-500 ${
-        active
-          ? "border-ink/15 text-ink group-hover:border-electric group-hover:bg-electric group-hover:text-white"
-          : "border-ink/10 text-mist"
-      }`}
-    >
-      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none">
-        <path
-          d="M7 17 17 7M9 7h8v8"
-          stroke="currentColor"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </span>
   );
 }

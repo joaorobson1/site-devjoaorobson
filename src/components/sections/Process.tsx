@@ -4,71 +4,70 @@ import { useRef } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
+import { Spotlight } from "@/components/ui/Spotlight";
 import { processSteps } from "@/data/content";
 
 export function Process() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start 70%", "end 60%"],
+    offset: ["start 80%", "end 55%"],
   });
-  const lineHeight = useSpring(scrollYProgress, {
+  const progress = useSpring(scrollYProgress, {
     stiffness: 90,
     damping: 28,
     mass: 0.4,
   });
 
   return (
-    <section id="processo" className="relative py-14 sm:py-20">
+    <section id="processo" className="relative py-16 sm:py-24">
       <div className="container-grid">
         <SectionHeading
+          eyebrow="Processo"
+          align="center"
+          className="mx-auto"
           title={
             <>
-              Do briefing à{" "}
-              <span className="text-electric">entrega</span>
+              Do briefing à <span className="text-gradient">entrega</span>
             </>
           }
           intro="Um processo claro e transparente, com comunicação constante em cada etapa do projeto."
         />
 
-        <div ref={ref} className="relative mt-20">
-          {/* Vertical rail */}
-          <div className="absolute left-0 top-0 hidden h-full w-px bg-ink/12 sm:left-[7.5rem] sm:block">
+        <div ref={ref} className="relative mt-16">
+          {/* Rail: horizontal on desktop, vertical on mobile */}
+          <div className="absolute left-[27px] top-0 h-full w-[2px] rounded-full bg-line/10 lg:left-0 lg:top-[27px] lg:h-[2px] lg:w-full">
             <motion.div
-              style={{ scaleY: lineHeight }}
-              className="absolute inset-0 origin-top bg-electric"
+              style={{ scaleY: progress }}
+              className="bg-brand-gradient absolute inset-0 origin-top rounded-full lg:hidden"
+            />
+            <motion.div
+              style={{ scaleX: progress }}
+              className="bg-brand-gradient absolute inset-0 hidden origin-left rounded-full lg:block"
             />
           </div>
 
-          <ol className="space-y-px">
-            {processSteps.map((step) => (
-              <li key={step.index}>
-                <Reveal from="up">
-                  <div className="group relative grid grid-cols-1 gap-4 py-9 sm:grid-cols-[7.5rem_1fr] sm:gap-10">
-                    {/* Index + meta */}
-                    <div className="flex items-center gap-4 sm:flex-col sm:items-start sm:gap-2">
-                      <span className="display text-3xl text-ink/20 transition-colors duration-500 group-hover:text-electric">
-                        {step.index}
-                      </span>
-                      <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-mist">
-                        {step.meta}
-                      </span>
-                    </div>
+          <ol className="relative grid gap-6 lg:grid-cols-5 lg:gap-4">
+            {processSteps.map((step, i) => (
+              <Reveal as="li" key={step.index} delay={i * 0.08}>
+                <div className="flex gap-5 lg:flex-col">
+                  {/* Node */}
+                  <span className="relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-line/10 bg-paper font-mono text-sm font-semibold text-electric shadow-[0_0_0_6px_rgb(var(--paper))]">
+                    <span className="bg-brand-gradient absolute inset-0 rounded-2xl opacity-15" />
+                    {step.index}
+                  </span>
 
-                    {/* Node + content */}
-                    <div className="relative sm:pl-10">
-                      {/* Node dot aligned to the rail */}
-                      <span className="absolute -left-[1.55rem] top-1.5 hidden h-3 w-3 -translate-x-1/2 rounded-full border-2 border-paper bg-ink transition-colors duration-500 group-hover:bg-electric sm:block" />
-                      <h3 className="display text-2xl text-ink sm:text-3xl">
-                        {step.title}
-                      </h3>
-                      <p className="mt-3 max-w-lg text-base leading-relaxed text-mist">
-                        {step.description}
-                      </p>
-                    </div>
-                  </div>
-                </Reveal>
-              </li>
+                  <Spotlight className="flex-1 p-6">
+                    <span className="relative font-mono text-[11px] uppercase tracking-[0.18em] text-mist">
+                      {step.meta}
+                    </span>
+                    <h3 className="display relative mt-2 text-2xl">{step.title}</h3>
+                    <p className="relative mt-3 text-sm leading-relaxed text-mist">
+                      {step.description}
+                    </p>
+                  </Spotlight>
+                </div>
+              </Reveal>
             ))}
           </ol>
         </div>

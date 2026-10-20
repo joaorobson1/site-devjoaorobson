@@ -5,12 +5,12 @@ import { useEffect, useState } from "react";
 type Theme = "light" | "dark";
 
 /**
- * Optional dark-mode toggle. The base identity is the light "paper" theme;
- * dark is offered as a variant. The initial class is set by an inline script
+ * Theme toggle. The base identity is the dark "night" theme; light is
+ * offered as a variant. The initial class is set by an inline script
  * in <head> (see layout.tsx) to avoid a flash of the wrong theme.
  */
 export function ThemeToggle({ className = "" }: { className?: string }) {
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>("dark");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -38,11 +38,11 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       aria-label={
         theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro"
       }
-      className={`relative inline-flex h-9 w-9 items-center justify-center rounded-full border border-ink/15 text-ink transition-colors duration-300 hover:border-electric hover:text-electric ${className}`}
+      className={`relative inline-flex h-9 w-9 items-center justify-center rounded-full border border-line/15 bg-surface/50 text-ink transition-colors duration-300 hover:border-electric hover:text-electric ${className}`}
     >
       {/* Avoid hydration mismatch: render neutral icon until mounted */}
       <span aria-hidden className="block h-4 w-4">
-        {mounted && theme === "dark" ? <SunIcon /> : <MoonIcon />}
+        {!mounted || theme === "dark" ? <SunIcon /> : <MoonIcon />}
       </span>
     </button>
   );

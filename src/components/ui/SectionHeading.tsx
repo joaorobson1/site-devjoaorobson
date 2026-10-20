@@ -2,19 +2,22 @@ import type { ReactNode } from "react";
 import { Reveal } from "./Reveal";
 
 type SectionHeadingProps = {
+  /** Small pill label above the title. */
+  eyebrow?: string;
   /** Main heading content. */
   title: ReactNode;
   /** Optional supporting paragraph. */
   intro?: ReactNode;
-  align?: "left" | "right";
+  align?: "left" | "center";
   className?: string;
 };
 
 /**
- * Shared editorial section header: oversized title with optional intro.
+ * Shared section header: pill eyebrow, oversized title, optional intro.
  * Keeps every section visually consistent.
  */
 export function SectionHeading({
+  eyebrow,
   title,
   intro,
   align = "left",
@@ -22,17 +25,22 @@ export function SectionHeading({
 }: SectionHeadingProps) {
   return (
     <div
-      className={`flex flex-col gap-6 ${
-        align === "right" ? "items-end text-right" : "items-start"
+      className={`flex flex-col gap-5 ${
+        align === "center" ? "items-center text-center" : "items-start"
       } ${className}`}
     >
-      <Reveal from="up">
-        <h2 className="display text-4xl sm:text-5xl lg:text-6xl max-w-4xl">
+      {eyebrow ? (
+        <Reveal from="up">
+          <span className="eyebrow">{eyebrow}</span>
+        </Reveal>
+      ) : null}
+      <Reveal from="up" delay={0.05}>
+        <h2 className="display max-w-4xl text-[clamp(2.3rem,5.5vw,4.5rem)]">
           {title}
         </h2>
       </Reveal>
       {intro ? (
-        <Reveal from="up" delay={0.05}>
+        <Reveal from="up" delay={0.1}>
           <p className="max-w-xl text-base leading-relaxed text-mist sm:text-lg">
             {intro}
           </p>

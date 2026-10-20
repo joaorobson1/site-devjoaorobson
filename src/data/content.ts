@@ -3,17 +3,21 @@
  * Kept separate from components so copy can be edited without touching JSX.
  */
 
+import type { IconName } from "@/components/ui/Icons";
+
 export type Service = {
   index: string;
   title: string;
   description: string;
   deliverables: string[];
+  icon: IconName;
 };
 
 export const services: Service[] = [
   {
     index: "01",
     title: "Landing Pages",
+    icon: "layout",
     description:
       "Páginas rápidas e persuasivas, feitas para transformar visitantes em clientes.",
     deliverables: ["Foco em vendas", "Aparece no Google", "Carregamento rápido", "Pronta para anúncios"],
@@ -21,6 +25,7 @@ export const services: Service[] = [
   {
     index: "02",
     title: "Sites Institucionais",
+    icon: "building",
     description:
       "Presença digital sólida que passa confiança e profissionalismo para a sua marca.",
     deliverables: ["Design exclusivo", "Você mesmo edita", "Blog e Google", "Vários idiomas"],
@@ -28,6 +33,7 @@ export const services: Service[] = [
   {
     index: "03",
     title: "Sistemas de Estoque",
+    icon: "box",
     description:
       "Controle total de entradas, saídas, alertas e relatórios em tempo real.",
     deliverables: ["Controle de produtos", "Avisos de estoque baixo", "Relatórios", "Vários usuários"],
@@ -35,6 +41,7 @@ export const services: Service[] = [
   {
     index: "04",
     title: "Painéis Administrativos",
+    icon: "chart",
     description:
       "Um lugar só para acompanhar números e tomar decisões com clareza.",
     deliverables: ["Números em tempo real", "Acessos por usuário", "Gráficos", "Exportar dados"],
@@ -42,6 +49,7 @@ export const services: Service[] = [
   {
     index: "05",
     title: "Automação de Processos",
+    icon: "zap",
     description:
       "Acabo com tarefas repetitivas, fazendo o sistema trabalhar por você.",
     deliverables: ["Tarefas no automático", "Avisos automáticos", "Conexão entre apps", "Agendamentos"],
@@ -49,6 +57,7 @@ export const services: Service[] = [
   {
     index: "06",
     title: "Integrações",
+    icon: "plug",
     description:
       "Conecto seu sistema a pagamentos, WhatsApp, e-mail e outras ferramentas.",
     deliverables: ["Pagamentos online", "WhatsApp e e-mail", "Outras ferramentas", "Tudo conectado"],
@@ -56,6 +65,7 @@ export const services: Service[] = [
   {
     index: "07",
     title: "Manutenção de Sistemas",
+    icon: "wrench",
     description:
       "Suporte contínuo, correções e melhorias para o seu sistema seguir evoluindo.",
     deliverables: ["Correção de erros", "Novas funções", "Acompanhamento", "Atualizações"],
@@ -110,31 +120,38 @@ export const processSteps: ProcessStep[] = [
 export type Differential = {
   title: string;
   description: string;
+  icon: IconName;
 };
 
 export const differentials: Differential[] = [
   {
     title: "Atendimento direto",
+    icon: "message",
     description: "Você fala comigo, o desenvolvedor — sem intermediários, sem ruído.",
   },
   {
     title: "Soluções sob medida",
+    icon: "sparkles",
     description: "Nada de template engessado. Cada projeto é desenhado para o seu caso.",
   },
   {
     title: "Performance",
+    icon: "gauge",
     description: "Sites rápidos, leves e otimizados — Lighthouse acima de 90.",
   },
   {
     title: "SEO técnico",
+    icon: "search",
     description: "Estrutura pensada para o Google encontrar e ranquear o seu negócio.",
   },
   {
     title: "Responsividade",
+    icon: "phone",
     description: "Experiência impecável do celular ao desktop, em qualquer tela.",
   },
   {
     title: "Suporte pós-entrega",
+    icon: "lifebuoy",
     description: "Continuo ao seu lado após o lançamento, para evoluir o produto.",
   },
 ];
